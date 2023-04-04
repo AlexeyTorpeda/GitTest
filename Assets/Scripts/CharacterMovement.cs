@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class CharacterMovement : MonoBehaviour
 {
     [SerializeField] private float _speed = 5f;
@@ -11,16 +12,17 @@ public class CharacterMovement : MonoBehaviour
     private bool _isFacingRight = true;
     private Rigidbody2D _rigidBody2D;
 
-    void Start()
+    private void Awake()
     {
         _rigidBody2D = GetComponent<Rigidbody2D>();
     }
 
-    void Update()
+    private void Update()
     {
         float HorizontalMove = Input.GetAxis("Horizontal");
         _rigidBody2D.velocity = new Vector2(HorizontalMove * _speed, _rigidBody2D.velocity.y);
-        _animator.SetFloat("HorizontalMove", Mathf.Abs(HorizontalMove));
+        int horizontalMoveHash = Animator.StringToHash("HorizontalMove");
+        _animator.SetFloat(horizontalMoveHash, Mathf.Abs(HorizontalMove));
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
