@@ -13,6 +13,7 @@ public class PlayerPhysicsMovement : MonoBehaviour
     [SerializeField] private Animator _animator;
     [SerializeField] private float _speed = 5f;
 
+    private float _jumpingPower = 6.5f;
     private Vector2 _targetVelocity;
     private bool _isGrounded;
     private Vector2 _groundNormal;
@@ -46,7 +47,7 @@ public class PlayerPhysicsMovement : MonoBehaviour
         _animator.SetFloat(horizontalMoveHash, Mathf.Abs(_horizontalMove));
 
         if (Input.GetKey(KeyCode.Space) && _isGrounded)
-            _velocity.y = 6.5f;
+            _velocity.y = _jumpingPower;
     }
 
     private void FixedUpdate()
@@ -60,11 +61,11 @@ public class PlayerPhysicsMovement : MonoBehaviour
         Vector2 moveAlongGround = new Vector2(_groundNormal.y, -_groundNormal.x);
         Vector2 move = moveAlongGround * deltaPosition.x;
 
-        Movement(move, false);
+        DoMovement(move, false);
 
         move = Vector2.up * deltaPosition.y;
 
-        Movement(move, true);
+        DoMovement(move, true);
 
         if (_horizontalMove < 0 && _isFacingRight)
         {
@@ -76,7 +77,7 @@ public class PlayerPhysicsMovement : MonoBehaviour
         }
     }
 
-    private void Movement(Vector2 move, bool yMovement)
+    private void DoMovement(Vector2 move, bool yMovement)
     {
         float distance = move.magnitude;
 
